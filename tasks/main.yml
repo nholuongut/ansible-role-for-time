@@ -1,0 +1,21 @@
+---
+- name: Set Timezone
+  become: yes
+  command: "timedatectl set-timezone {{ time_timezone }}"
+  when: time_install
+
+- name: Test Timezone Changes
+  command: "timedatectl"
+  when: time_install
+
+- name: Verify Chrony Is Running
+  command: "chronyc tracking"
+  when: time_install and (ansible_distribution == "RedHat")
+
+- name: Display Chrony Sources
+  command: "chronyc sources"
+  when: time_install and (ansible_distribution == "RedHat")
+
+- name: Display Chrony Statistics
+  command: "chronyc sourcestats"
+  when: time_install and (ansible_distribution == "RedHat")
